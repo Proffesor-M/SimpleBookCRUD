@@ -21,6 +21,20 @@ func getBooks(c *gin.Context) {
 	c.JSON(http.StatusOK, books)
 }
 
+func getBooks1(c *gin.Context) {
+	var bookQuery models.Book
+	if err := c.ShouldBindQuery(&bookQuery); err != nil {
+		handleError(c, err, http.StatusBadRequest)
+		return
+	}
+	books, err := models.SearchBooks(bookQuery)
+	if err != nil {
+		handleError(c, err, http.StatusInternalServerError)
+		return
+	}
+	c.JSON(http.StatusOK, books)
+}
+
 func createBook(c *gin.Context) {
 	var book models.Book
 	if err := c.ShouldBindJSON(&book); err != nil {
